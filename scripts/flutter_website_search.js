@@ -36,36 +36,42 @@ module.exports = function(robot) {
         })
         .get()(function(err, res, body) {
           let error, results;
-          robot.logger.debug(body);
+          
           if (err) {
             robot.logger.error(err);
             return robot.emit('error', err, msg);
           }
+
           try {
             if (res.statusCode === 200) {
               results = JSON.parse(body);
-              robot.logger.debug(`results: ${JSON.stringify(results)}`);
             } else {
               return robot.emit('error', `${res.statusCode}: ${body}`, msg);
             }
           } catch (error1) {
             error = error1;
             robot.logger.error(error);
-            return msg.reply(`Error! ${body}`);
+            return;
           }
+
           if (results.error) {
             robot.logger.error(results.error);
-            return msg.reply(`Error! ${JSON.stringify(results.error)}`);
+            return;
           }
+
           results = results.items;
+          
           if ((results == null) || !(results.length > 0)) {
-            return msg.reply(`No results for \"${query}\"`);
+            return;
           }
+
           const reply = [];
+          
           for (item of results) {
-              robot.logger.debug(JSON.stringify(item));
+              // robot.logger.debug(JSON.stringify(item));
               reply.push(`[${item.title}](${item.link})`);
           }
+
           return msg.reply(reply.join('\n'));
       });
     });
