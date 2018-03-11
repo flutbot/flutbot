@@ -23,6 +23,6 @@
     "node": "0.10.x"
   },
   "scripts": {
-    "start": "hubot --adapter gitter2"
+    "start": "hubot --adapter gitter2 --name flutbot"
   }
 }
